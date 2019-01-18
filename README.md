@@ -1,5 +1,5 @@
 # iredmail Full-Featured Mail Server on Ubuntu 18.04 with iRedMail
-iredmailhttps://www.google.com/imgres?imgurl=https%3A%2F%2Fvoidnull.es%2Fwp-content%2Fuploads%2F2018%2F11%2Firedmail.png&imgrefurl=https%3A%2F%2Fvoidnull.es%2Fcomo-montar-un-servidor-de-correo-con-iredmail-en-debian-9%2F&docid=gl3THJa3BvnADM&tbnid=Ji6iRPfBGVlr8M%3A&vet=10ahUKEwiyk8i75PffAhUimeAKHSQ1C_kQMwhBKAMwAw..i&w=674&h=398&bih=920&biw=1920&q=iredmail%20logo&ved=0ahUKEwiyk8i75PffAhUimeAKHSQ1C_kQMwhBKAMwAw&iact=mrc&uact=8
+iredmail
 
 Why iRedMail
 Privacy
