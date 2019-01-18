@@ -35,6 +35,3 @@ Manage your mail accounts with a web admin panel. iRedMail ships a free and easy
 
 Reproduceable Deployment
 Get a reproduceable, easy to use, flexible, stable mail server in just few minutes, easy to migrate an old server, or restore a crashed server to new iRedMail server.
-
-Professional Tech Support
-We back you up with fast and professional tech support. Check our full support services list.
