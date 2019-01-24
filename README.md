@@ -1,7 +1,6 @@
 # The Layman's Guide to Setiing Up a Fully Featured Mail Server
 
 ## This guide will be showing you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04, allowing you to take control of your email.  :envelope:
-***
 
 ### Why should I host my own email? If your not interested in the myriad of reasons of why you **should** host your own email, feel free to scroll past this and dive into the nitty-gritty.
 ***
