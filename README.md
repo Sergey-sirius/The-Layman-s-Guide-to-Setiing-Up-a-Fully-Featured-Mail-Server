@@ -1,6 +1,6 @@
 # How to Set Up a Fully Featured Mail Server on Ubuntu 18.04 with iRedMail 
 
-## This guide will be showing you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04, allowing you to take back control of your email.  :envelope:
+## This guide will be showing you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04, allowing you to take control of your email.  :envelope:
 ***
 
 ### Why should I host my own email? If your not interested in the myriad of reasons of why you **should** host your own email, feel free to scroll past this and dive into the nitty-gritty.
@@ -114,11 +114,13 @@ Since [DigitalOcean](https://m.do.co/c/285be2a21159) is managing our DNS, this b
 7. You will nowe have a new record, as shown below.
 ![](http://i66.tinypic.com/2ijp8pw.png)
 8.  After creating MX record, you also need to create an `A` record for `mail.sillydomain.site` , so that it can be resolved to an IP address.
-```
-A '.' at the end of your name will automaticcaly be added to yoru dopmain.
-The hostname for your MX record can not be an alias to another name. Also, It’s highly recommended that you use hostnames, rather than bare IP addresses for MX record.
-```
-We will be addding more DNS records later in this guide, but this is a good primer to get stareted.
+9.  Click on Networking in the left hand navigation bar.
+10. Click on the your domain name.
+11. We can now create a new MX record for our domain name. Under `Create a new record,` click on `A`
+12. Enter `@` in the `Hostame` field, enter `mail.sillydomain.site` in `Will Direct To Field` field, amd `90` in the TTL Field.
+
+This record will allow you to connect to the iRedMail Admin panel via Hostname instead of IP address after the install.
+>You will be addding more DNS records later in this guide, but this is a good primer to get stareted.
 ***
 ### Build and Configure a VPS aka 'Droplet'
 To set up a complete email server, you need a server with at least 1GB RAM. This guide is done on a $5/month DigitalOcean Droplet or VPS (virtual private server). I recommend [DigitalOcean](https://m.do.co/c/285be2a21159) because it doesn’t block port 25, and is fairly user friendly. Additionally, if you are using a personal domain, 1 GB RAM with 25 GB Disk space should be sufficent to run everything you need.
@@ -171,7 +173,7 @@ mail.sillydomain.site
 ```
 ***
 ### Setting up iRedMail Mail Server on Ubuntu 18.04 with 
-iRedMail is a shell script that automatically install and configure all necessary mail server components on your Linux server, eliminating manual installation and configuration. With iRedMail, you can easily create as many mailboxes as you want in a web-based admin panel. Mailboxes can be stored in MariaDB/MySQL, PostreSQL database or OpenLDAP. The Open-source software used in iRedMail is:
+iRedMail is a shell script that automatically installs and configures all the necessary mail server components on your Linux server (Droplet), eliminating manual installation and configuration. With iRedMail, you can easily create as many mailboxes as you want in a web-based admin panel. Mailboxes can be stored in MariaDB/MySQL, PostreSQL database or OpenLDAP. The Open-source software used in iRedMail is:
 
 - Postfix SMTP server
 - Dovecot IMAP server
@@ -190,35 +192,52 @@ iRedMail is a shell script that automatically install and configure all necessar
 
 1. Type the following command download the iRedMail Bash installer with `wget`. At the time of this writing, the latest version of iRedMail is 0.9.9, released on December 17, 2018. Please go to iRedMail download page (http://www.iredmail.org/download.html)  to check for the latest version.
 ```
-wget https://bitbucket.org/zhb/iredmail/downloads/iRedMail-0.9.9.tar.bz2
+# wget https://bitbucket.org/zhb/iredmail/downloads/iRedMail-0.9.9.tar.bz2
 ```
 2. Extract the tarball.
 ```
-tar xvf iRedMail-0.9.9.tar.bz2
+# tar xvf iRedMail-0.9.9.tar.bz2
 ```
-3. Then cd into the newly created directory.
+1. Naviagte into the newly created directory using `cd`.
 ```
-cd iRedMail-0.9.9
+# cd iRedMail-0.9.9
 ```
-4. Add executable permission to the iRedMail.sh script.
+4. Add executable permissions to the iRedMail.sh script.
 ```
-chmod +x iRedMail.sh
+# chmod +x iRedMail.sh
 ```
 5. Next, run the Bash script with sudo privilege.
 ```
-sudo bash iRedMail.sh
+$ sudo bash iRedMail.sh
 ```
-6. You should now see installer
-7. LCick Yes
-8.  You can use the default one /var/vmail, so simply press Enter.
-9.  Then choose whether you want to run a web server. It’s highly recommended that you choose to run a web server because you need the web-based admin penal to add email accounts. Also it allows you to access the Roundcube webmail. By default, Nginx web server is selected, so you can simply press Enter.  (An asterisk indicates the item is selected.)
-10. Then select the storage backend. Choose one that you are familiar with. This tutorial chose MariaDB. Press up and down arrow key and press the space bar to select.
+6. You should now see the iRedMail installer
+![](http://i66.tinypic.com/jkan83.png)
+
+7. LCick Yes (Enter)
+8.  You can use the default storage location which will be `/var/vmail`, press Enter.
+![](http://i64.tinypic.com/2q0qblu.png)
+
+9.  It’s **highly recommended** that you choose to run a web server because you need the web-based Admin Panel to add email accounts, domains, and users. Also it allows you to access the Roundcube webmail. By default, Nginx web server is selected, so you can simply press Enter.  (*An asterisk indicates the item is selected and will reprsent that for the rest of this guide*.)
+![](http://i63.tinypic.com/fo18xs.png)
+
+10. Select the storage backend. This guide uses MariaDB. Press up and down arrow key and press the space bar to select.
+![](http://i63.tinypic.com/10qzyuw.png)
+>If you are unsure which to use, use MariaDB.
 11. If you selected MariaDB or MySQL, then you will need to set the MySQL root password.
-12. Next, enter your first mail domain. You can add additional mail domains later in the web-based admin panel. This tutorial assumes that you want an email account like john.doe@your-domain.com, in that case, you need to enter your-domain.com here, without sub-domain. Do not press the space bar after your domain name. I think iRedMail will copy the space character along with your domain name, which can result in installation failure.
-13. set a password for the mail domain administrator.
-14. Choose optional components. By default, 4 items are selected. If you like to have SOGo groupware, then select it and press Enter.
+![](http://i65.tinypic.com/vgr3up.png)
+
+12. Enter your first mail address. You can add additional mail: domains, addresses, and users, later in the Admin Aanel. This guide assumes that you want an email account like `john.doe@your-domain.com` or `admin@sillydomain.site`
+![](http://i67.tinypic.com/fa4gwi.png)
+
+>**Do not press the space bar after your domain name!** iRedMail will copy the space character along with your domain name, which will result in installation failure.
+
+1.  set a password for the mail domain administrator.
+![]()
+14. Choose additional components. By default, four items are selected. Unless you ened SOGo groupware, *dont select it*, press Enter.
 15. Now you can review your configurations. Type Y to begin the installation of all mail server components.
->this will take some time. go get a cup of coffee, you deserve it.
+
+>tThis will take a little bit of time. Treat yourself to a :coffee:, :tea:, :beer:, :wine_glass:or  :tropical_drink:, you deserve it.
+
 16. At the end of installation, choose y to use firewall rules provided by iRedMail and restart firewall.
 17. iRedMail installation is complete. You will be notified the URL of webmail, SOGo groupware and web admin panel and the login credentials. The iRedMail.tips file contains important information about your iRedMail server.
 18. Reboot your Ubuntu 18.04 server.
@@ -235,6 +254,8 @@ sudo shutdown -r now
 
 
 
-19. We can now create a new MX record for our domain name. Under `Create a new record,` click on `A`
 
 
+***
+### To Do
+- Write/Test against DigitalOcean Ubuntu 
