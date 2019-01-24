@@ -1,4 +1,4 @@
-# How to Set Up a Fully Featured Mail Server on Ubuntu 18.04
+# How to Set Up a Fully Featured Mail Server on Ubuntu 18.04 with iRedMail 
 
 ## This guide will be showing you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04, allowing you to take control of your email.  :envelope:
 ***
@@ -220,30 +220,48 @@ $ sudo bash iRedMail.sh
 9.  It’s **highly recommended** that you choose to run a web server because you need the web-based Admin Panel to add email accounts, domains, and users. Also it allows you to access the Roundcube webmail. By default, Nginx web server is selected, so you can simply press Enter.  (*An asterisk indicates the item is selected and will reprsent that for the rest of this guide*.)
 ![](http://i63.tinypic.com/fo18xs.png)
 
-10. Select the storage backend. This guide uses MariaDB. Press up and down arrow key and press the space bar to select.
+10. Select a storage type. This guide uses `MariaDB`. Press up and down arrow key and press the space bar to select.
 ![](http://i63.tinypic.com/10qzyuw.png)
->If you are unsure which to use, use MariaDB.
-11. If you selected MariaDB or MySQL, then you will need to set the MySQL root password.
+
+11. If you select MariaDB or MySQL, then you will need to set a `root` password.
+>If you are unsure which to use, choose MariaDB.
+
 ![](http://i65.tinypic.com/vgr3up.png)
 
-12. Enter your first mail address. You can add additional mail: domains, addresses, and users, later in the Admin Aanel. This guide assumes that you want an email account like `john.doe@your-domain.com` or `admin@sillydomain.site`
+1.  Enter your first mail address. You can add additional mail: domains, addresses, and users, later in the Admin Aanel. This guide assumes that you want an email account like `john.doe@your-domain.com` or `admin@sillydomain.site`
 ![](http://i67.tinypic.com/fa4gwi.png)
 
 >**Do not press the space bar after your domain name!** iRedMail will copy the space character along with your domain name, which will result in installation failure.
 
-1.  set a password for the mail domain administrator.
-![]()
-14. Choose additional components. By default, four items are selected. Unless you ened SOGo groupware, *dont select it*, press Enter.
-15. Now you can review your configurations. Type Y to begin the installation of all mail server components.
+13. Set a *strong* password for the mail domain administrator.
+![](http://i66.tinypic.com/73cxub.png)
 
->tThis will take a little bit of time. Treat yourself to a :coffee:, :tea:, :beer:, :wine_glass:or  :tropical_drink:, you deserve it.
+14. Choose additional components. By default, the following four items are selected:
+    - RoundCube Mail (WebMail Client)
+    - netdata (System Monitor)
+    - iRedAdmin (Web based Admin Panel)
+    - Fail2ban (Prevents Brute Force attacks)
 
-16. At the end of installation, choose y to use firewall rules provided by iRedMail and restart firewall.
-17. iRedMail installation is complete. You will be notified the URL of webmail, SOGo groupware and web admin panel and the login credentials. The iRedMail.tips file contains important information about your iRedMail server.
-18. Reboot your Ubuntu 18.04 server.
+>Unless you **need** SOGo groupware, *dont select it*, press Enter.
+
+![](http://i65.tinypic.com/35iq8au.png)
+
+15.  Now you can review your configurations. Type `Y` to begin the installation of the iRedMail components.
+![](http://i63.tinypic.com/htvjwj.png)
+
+>This will take a bit of time. Treat yourself to a :coffee:, :tea:, :beer:, :wine_glass: or :tropical_drink:, you deserve it!
+
+16. At the end of installation, type `Y` to use firewall rules provided by iRedMail and restart the firewall.
+    
+17. When the installation is complete you will see a message that says `Congratulations, mail server setup completed successfully...` like below.
+![](http://i63.tinypic.com/110w4up.png)
+>The password you created will be displayed in *clear text*; I have redacted it form the screenshot.
+18. Reboot your Ubuntu 18.04 server (Droplet).
 ```
-sudo shutdown -r now
+# sudo shutdown -r now
 ```
+The iRedMail installation is complete! The iRedMail.tips file contains important information about your iRedMail server.
+
 
 
 
@@ -258,4 +276,9 @@ sudo shutdown -r now
 
 ***
 ### To Do
+- Write/Test against AWS Ubuntu:
+  -  ~~18.04 LTS~~
+  -  16.04 LTS
 - Write/Test against DigitalOcean Ubuntu 
+  -   ~~18.04 LTS~~
+  -  16.04 LTS
