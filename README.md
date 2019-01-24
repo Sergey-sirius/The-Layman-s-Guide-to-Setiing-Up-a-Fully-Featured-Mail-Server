@@ -1,4 +1,4 @@
-# How to Set Up a Fully Featured Mail Server on Ubuntu 18.04 with iRedMail 
+# The Layman's Guide to Setiing Up a Fully Featured Mail Server
 
 ## This guide will be showing you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04, allowing you to take control of your email.  :envelope:
 ***
@@ -56,17 +56,14 @@ I am platform agnostic (I am also AWS Certified). This install was tested/config
 - Familiarity using Linux from either CLI or Console
 - Anywhere you see `sillydomain.site` substitute for **your** domain.
 ***
-
-
-
 ### Buy a Domain
 1. Head to [Namecheap.com](www.namecheap.com).
 2. Create a new [account](https://www.namecheap.com/myaccount/signup.aspx).
 3. Purchase a new domain.
    - I recommend using a standard TLD such as: `.com` ; `.org` ; `.net` ; or `.us`.
    - For this guide, I have purchased, and am going to use: `sillydomain.site`
-  
-![sillydomain](http://i67.tinypic.com/ibgljt.png)
+   - 
+![](http://i67.tinypic.com/ibgljt.png)
 ***
 ### DNS
 
@@ -75,7 +72,7 @@ I dont want to have to deal with DNS in multiple places, so I am going to have D
 1. Scroll down to the Nameservers section of your Domain Control Panel.
 2. Change your Nameservers choice from *Namecheap Basic DNS* to *Custom DNS*.
 
-![sillydomain-dns](http://i67.tinypic.com/2ronuvp.png)
+![](http://i67.tinypic.com/2ronuvp.png)
 
 3. Now Add:
 ```
@@ -211,10 +208,12 @@ iRedMail is a shell script that automatically installs and configures all the ne
 $ sudo bash iRedMail.sh
 ```
 6. You should now see the iRedMail installer
+
 ![](http://i66.tinypic.com/jkan83.png)
 
-7. LCick Yes (Enter)
+7. Click Yes (Enter)
 8.  You can use the default storage location which will be `/var/vmail`, press Enter.
+
 ![](http://i64.tinypic.com/2q0qblu.png)
 
 9.  It’s **highly recommended** that you choose to run a web server because you need the web-based Admin Panel to add email accounts, domains, and users. Also it allows you to access the Roundcube webmail. By default, Nginx web server is selected, so you can simply press Enter.  (*An asterisk indicates the item is selected and will reprsent that for the rest of this guide*.)
@@ -222,19 +221,22 @@ $ sudo bash iRedMail.sh
 ![](http://i63.tinypic.com/fo18xs.png)
 
 10.  Select a storage type. This guide uses `MariaDB`. Press up and down arrow key and press the space bar to select.
+
 ![](http://i63.tinypic.com/10qzyuw.png)
 
-11. If you select MariaDB or MySQL, then you will need to set a `root` password.
+1.  If you select MariaDB or MySQL, then you will need to set a `root` password.
 >If you are unsure which to use, choose MariaDB.
 
 ![](http://i65.tinypic.com/vgr3up.png)
 
 12.  Enter your first mail address. You can add additional mail: domains, addresses, and users, later in the Admin Aanel. This guide assumes that you want an email account like `john.doe@your-domain.com` or `admin@sillydomain.site`
+
 ![](http://i67.tinypic.com/fa4gwi.png)
 
 >**Do not press the space bar after your domain name!** iRedMail will copy the space character along with your domain name, which will result in installation failure.
 
 13. Set a *strong* password for the mail domain administrator.
+
 ![](http://i66.tinypic.com/73cxub.png)
 
 14. Choose additional components. By default, the following four items are selected:
@@ -248,23 +250,61 @@ $ sudo bash iRedMail.sh
 ![](http://i65.tinypic.com/35iq8au.png)
 
 15.  Now you can review your configurations. Type `Y` to begin the installation of the iRedMail components.
+
 ![](http://i63.tinypic.com/htvjwj.png)
 
 >This will take a bit of time. Treat yourself to a :coffee:, :tea:, :beer:, :wine_glass: or :tropical_drink:, you deserve it!
 
-16. At the end of installation, type `Y` to use firewall rules provided by iRedMail and restart the firewall.
+16.  At the end of installation, type `Y` to use firewall rules provided by iRedMail and restart the firewall.
     
-17. When the installation is complete you will see a message that says `Congratulations, mail server setup completed successfully...` like below.
+17.  When the installation is complete you will see a message that says `Congratulations, mail server setup completed successfully...` like below.
+
 ![](http://i63.tinypic.com/110w4up.png)
->The password you created will be displayed in *clear text*; I have redacted it form the screenshot.
+>The password you created will be displayed in *clear text*; I have redacted it from this screenshot.
 18. Reboot your Ubuntu 18.04 server (Droplet).
 ```
 # sudo shutdown -r now
 ```
-The iRedMail installation is complete! The iRedMail.tips file contains important information about your iRedMail server.
+The iRedMail installation is complete! The `iRedMail.tips` file contains important information about your iRedMail server.
 
+You can locate this file by navigating to:
+```
+# cd iRedMail-0.9.9
+```
+```
+# sudo nano iRedMail.tips
+```
+***
+### Installing A TLS Certificate
+Since the mail server is using a self-signed TLS certificate, both desktop mail client users and webmail client users will see a warning. To fix this, we can obtain and install a free Let’s Encrypt TLS certificate.
 
+1. Install the Let’s Encrypt (Certbot) client:
+```
+# sudo apt install software-properties-common
+```
+>This installs the prerequisites for Certbot.
+2. Add the Certbot repo to your server.
+```
+# sudo add-apt-repository ppa:certbot/certbot
+```
+>This adds the Certbot software and dependencies.
+3. Press `Enter` to continue.
+4. Install the Certbot software.
+```
+$ sudo apt install certbot
+```
+>This install the Certbot software to create your certificate.
+5. Type `Y` to continue.
 
+iRedMail has already configured TLS settings in the default Nginx virtual host, so here I recommend using the webroot plugin, instead of nginx plugin, to obtain certificate. Run the following command. Replace red text with your actual data
+```
+# sudo certbot certonly --webroot --agree-tos --email postmaster@sillydomain.site -d mail.sillydomain.site -w /var/www/html/
+```
+6. When it asks you if you want to receive communications from EFF, you can choose No.
+
+![]()
+
+If everything went well, you will see the following text indicating that you have successfully obtained a TLS certificate. Your certificate and chain have been saved at /etc/letsencrypt/live/mail.your-domain.com/ directory.
 
 
 
