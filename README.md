@@ -1,4 +1,4 @@
-# How to Set Up a Fully Featured Mail Server on Ubuntu 18.04 with iRedMail 
+# How to Set Up a Fully Featured Mail Server on Ubuntu 18.04
 
 ## This guide will be showing you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04, allowing you to take control of your email.  :envelope:
 ***
