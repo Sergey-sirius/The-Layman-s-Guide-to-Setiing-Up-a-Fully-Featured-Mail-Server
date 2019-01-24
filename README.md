@@ -218,9 +218,10 @@ $ sudo bash iRedMail.sh
 ![](http://i64.tinypic.com/2q0qblu.png)
 
 9.  It’s **highly recommended** that you choose to run a web server because you need the web-based Admin Panel to add email accounts, domains, and users. Also it allows you to access the Roundcube webmail. By default, Nginx web server is selected, so you can simply press Enter.  (*An asterisk indicates the item is selected and will reprsent that for the rest of this guide*.)
+
 ![](http://i63.tinypic.com/fo18xs.png)
 
-10. Select a storage type. This guide uses `MariaDB`. Press up and down arrow key and press the space bar to select.
+10.  Select a storage type. This guide uses `MariaDB`. Press up and down arrow key and press the space bar to select.
 ![](http://i63.tinypic.com/10qzyuw.png)
 
 11. If you select MariaDB or MySQL, then you will need to set a `root` password.
@@ -228,7 +229,7 @@ $ sudo bash iRedMail.sh
 
 ![](http://i65.tinypic.com/vgr3up.png)
 
-1.  Enter your first mail address. You can add additional mail: domains, addresses, and users, later in the Admin Aanel. This guide assumes that you want an email account like `john.doe@your-domain.com` or `admin@sillydomain.site`
+12.  Enter your first mail address. You can add additional mail: domains, addresses, and users, later in the Admin Aanel. This guide assumes that you want an email account like `john.doe@your-domain.com` or `admin@sillydomain.site`
 ![](http://i67.tinypic.com/fa4gwi.png)
 
 >**Do not press the space bar after your domain name!** iRedMail will copy the space character along with your domain name, which will result in installation failure.
