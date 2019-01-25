@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <title>A Layman's Guide to Setting Up a Fully Featured Mail Server</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'HelveticaNeue-Light', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+    </head>
+    <body>
+        <h1 id="a-laymans-guide-to-setting-up-a-fully-featured-mail-server">A Layman's Guide to Setting Up a Fully Featured Mail Server</h1>
+<p><img src="https://img.shields.io/github/last-commit/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server.svg" alt="">
+<a href="https://github.com/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style%3Dsocial" alt=""></a></p>
+<h2 id="this-guide-will-show-you-how-to-use-iredmail-to-quickly-set-up-a-vps-virtual-private-server-running-ubuntu-1804-with-iredmail-allowing-you-to-take-control-of-your-email-envelope">This guide will show you how to use iRedMail to quickly set up a VPS (Virtual Private Server) running Ubuntu 18.04 with iRedMail, allowing you to take control of your email.  :envelope:</h2>
+<h3 id="why-should-i-host-my-own-email-if-your-not-interested-in-the-myriad-of-reasons-of-why-you-should-host-your-own-email-feel-free-to-scroll-past-this-and-dive-into-the-nitty-gritty">Why should I host my own email? If your not interested in the myriad of reasons of why you <strong>should</strong> host your own email, feel free to scroll past this and dive into the nitty-gritty.</h3>
+<hr>
+<h3 id="for-those-interested-in-a-short-privacy-and-security-rant">For those interested in a short privacy and security rant:</h3>
+<p>You need not look any further then media headlines regarding recent data breaches which expose <strong>your</strong> personally identifying information <a href="https://en.wikipedia.org/wiki/Personally_identifiable_information">PII</a> and sensitive personal information <a href="https://en.wikipedia.org/wiki/Personally_identifiable_information">SPI</a> to the world:</p>
+<p><a href="https://techcrunch.com/2019/01/23/financial-files/">Millions of of loand mortgage documents leaked online</a>  :fearful:</p>
+<p><a href="https://www.ftc.gov/equifax-data-breach">Equifax Data Breach</a> :sob:</p>
+<p><a href="https://money.cnn.com/2017/10/03/technology/business/yahoo-breach-3-billion-accounts/index.html">Yahoo Email Data Breach</a> :astonished:</p>
+<p><a href="https://www.wired.com/story/google-plus-bug-52-million-users-data-exposed/">Google+ Data Leak/Breach</a> :disappointed:</p>
+<p><a href="https://en.wikipedia.org/wiki/Facebook%E2%80%93Cambridge_Analytica_data_scandal">Cambridge Analytica Data Scandal</a> :unamused:</p>
+<p>That's just to name a few of the <strong>larger</strong> breaches of 2018; not including the &quot;smaller&quot; ones like:</p>
+<p><a href="https://www.wfla.com/news/florida/careplus-health-plans-notifying-customers-of-privacy-breach/1030535344">CarePlus Privacy Breach</a>  :anguished:</p>
+<p><a href="https://gizmodo.com/119-000-passports-and-photo-ids-of-fedex-customers-foun-1823035669">FedEx Data Leak/Breach</a>  :weary:</p>
+<p><a href="https://clark.com/protect-your-identity/suntrust-data-breach-customer-records/">Suntrust Banks Data Breach/Theft</a>  :worried:</p>
+<p>The long and short of it is:</p>
+<blockquote>
+<p>Our personal data is being sold, traded, and shared in ways that we’re only <strong>beginning</strong> to fully unravel.</p>
+<p>Louise Matsakis - Wired</p>
+</blockquote>
+<p><a href="https://www.wired.com/story/2018-power-of-personal-data/">We’re all Just Starting to Realize the Power of Personal Data</a></p>
+<h3 id="by-the-end-of-this-guide-you-will-be-able-to">By the end of this guide, you will be able to:</h3>
+<ul>
+<li>Install</li>
+<li>Configure</li>
+<li>Manage</li>
+<li>Maintain</li>
+</ul>
+<p>A secured personal email server with your own domain.</p>
+<hr>
+<h3 id="hints-tips-and-disclosures">Hints, Tips, and Disclosures</h3>
+<h4 id="hints">Hints</h4>
+<p>I have done the legwork and typed <strong>ALL</strong> of these commands manually in testing this guide. They all work; <em>if typed correctly</em>.</p>
+<p>SSH with <a href="https://www.putty.org/">PuTTY</a> is your friend. It will make your install much easier.</p>
+<h4 id="tips">Tips</h4>
+<blockquote>
+<p>These are notes, and contain useful information.</p>
+</blockquote>
+<pre><code><div>These are code/commands and you can copy and paste this if you are using PuTTY with SSH
+</div></code></pre>
+<h4 id="disclosures">Disclosure(s)</h4>
+<p>This guide was tested, configured, and verified on Digital Ocean (due to cost). Most of the DigitalOcean links include <em>my</em> referral code, which helps me cover the cost of my Droplets. If you dont want to use my referral code, you can sign up directly at <a href="https://www.digitalocean.com/">DigitalOcean</a></p>
+<hr>
+<h3 id="prerequisites--assumption">Prerequisites &amp; Assumption</h3>
+<ul>
+<li>Domain name
+<ul>
+<li>Not required if you just want to test the install.</li>
+<li>I prefer (used) <a href="https://www.namecheap.com/">Namecheap.com</a> due to good pricing and a strong Anti-SOPA stance.</li>
+</ul>
+</li>
+<li>Virtual Private Server (Droplet) running <code>Ubuntu 18.04 x64</code>
+<ul>
+<li>I prefer (used) <a href="https://m.do.co/c/285be2a21159">DigitalOcean</a>.</li>
+</ul>
+</li>
+<li>Familiarity using Linux from the Command Line (CLI)</li>
+<li>Anywhere you see <code>mail.sillydomain.site</code> <strong>or</strong> <code>sillydomain.site</code> substitute for <strong>your</strong> domain.</li>
+</ul>
+<hr>
+<h3 id="buy-a-domain">Buy a Domain</h3>
+<ol>
+<li>Head to <a href="www.namecheap.com">Namecheap.com</a>.</li>
+<li>Create a new <a href="https://www.namecheap.com/myaccount/signup.aspx">account</a>.</li>
+<li>Purchase a new domain.
+<ul>
+<li>I recommend using a standard TLD such as: <code>.com</code> ; <code>.org</code> ; <code>.net</code> ; or <code>.us</code>.</li>
+<li>For this guide, I have purchased, and am going to use: <code>sillydomain.site</code></li>
+<li></li>
+</ul>
+</li>
+</ol>
+<p><img src="http://i67.tinypic.com/ibgljt.png" alt=""></p>
+<hr>
+<h3 id="dns">DNS</h3>
+<p>We dont want to have to deal with DNS in multiple places, so were going to have DigitalOcean manage DNS.</p>
+<ol>
+<li>Scroll down to the Nameservers section of your Domain Control Panel in Namecheap.</li>
+<li>Change your Nameservers choice from <em>Namecheap Basic DNS</em> to <em>Custom DNS</em>.</li>
+</ol>
+<p><img src="http://i67.tinypic.com/2ronuvp.png" alt=""></p>
+<ol start="3">
+<li>Now Add:</li>
+</ol>
+<pre><code><div>ns1.digitalocean.com
+ns2.digitalocean.com
+ns3.digitalocean.com
+</div></code></pre>
+<p>Like below:
+<img src="http://i66.tinypic.com/2jeuyaa.png" alt=""></p>
+<ol start="4">
+<li>Click the Green Check mark to commit that changes.</li>
+<li>Your DNS is now being pointed to <a href="www.digitalocean.com">DigitalOcean</a> to manage. In my experience this was updated in about 30 minutes, but it <em>can</em> take up to 48 hours.</li>
+</ol>
+<hr>
+<h3 id="dns-and-mx-records">DNS and MX Records</h3>
+<p>The MX record specifies which host or hosts handle emails for a particular domain name. For example, the host that handles emails for <code>sillydomain.site</code> is <code>mail.sillydomain.site</code>. If someone with a Gmail account sends an email to <code>somebody@sillydomain.site</code>, then Gmail server will query the MX record of <code>sillydomain.site</code>. When it finds out that <code>mail.sillydomain.site</code> is responsible for accepting email, it then query the A record of <code>mail.sillydomain.site</code> to get the IP address, thus the email can be delivered.</p>
+<p>Since <a href="https://m.do.co/c/285be2a21159">DigitalOcean</a> is managing the DNS, this becomes a <em>fairly</em> painless process.</p>
+<blockquote>
+<p>If you have not already created an account, go to <a href="https://m.do.co/c/285be2a21159">DigitalOcean</a> and sign up for an account.</p>
+</blockquote>
+<ol>
+<li>Once you have logged into your <a href="https://m.do.co/c/285be2a21159">DigitalOcean</a> portal, click on Networking in the left hand navigation bar.</li>
+</ol>
+<p><img src="http://i68.tinypic.com/29puhc9.png" alt=""></p>
+<ol start="2">
+<li>Click on Domains</li>
+</ol>
+<p><img src="http://i65.tinypic.com/j9aiqv.png" alt=""></p>
+<ol start="3">
+<li>Enter the Domain Name and click <em>Add Domain</em></li>
+</ol>
+<p><img src="http://i66.tinypic.com/2pqp5ki.png" alt=""></p>
+<ol start="4">
+<li>We can now create a new MX record for our domain name. Under <code>Create a new record,</code> click on <code>MX</code></li>
+</ol>
+<p><img src="http://i63.tinypic.com/r8ytxu.png" alt=""></p>
+<ol start="5">
+<li>Enter <code>@</code> in the Hostame field, enter <code>mail.sillydomain.site</code> in Mail Providers Mail Server Value field, enter <code>10</code> in the Priotity field, and <code>1800</code> in the TTL Field.</li>
+</ol>
+<p><img src="http://i66.tinypic.com/20p1mok.png" alt="">
+6. Click Create Record.
+7. You will nowe have a new record, as shown below.</p>
+<p><img src="http://i66.tinypic.com/2ijp8pw.png" alt="">
+8.  After creating MX record, you also need to create an <code>A</code> record for <code>mail.sillydomain.site</code> , so that it can be resolved to an IP address.</p>
+<ol start="9">
+<li>Click on Networking in the left hand navigation bar.</li>
+<li>Click on the your domain name.</li>
+<li>We can now create a new MX record for our domain name. Under <code>Create a new record,</code> click on <code>A</code></li>
+<li>Enter <code>@</code> in the <code>Hostame</code> field, enter <code>mail.sillydomain.site</code> in <code>Will Direct To Field</code> field, amd <code>90</code> in the TTL Field.</li>
+</ol>
+<p>This record will allow you to connect to the iRedMail Admin panel via Hostname instead of IP address after the install.</p>
+<blockquote>
+<p>You will be addding more DNS records later in this guide, but this is a good primer to get stareted.</p>
+</blockquote>
+<hr>
+<h3 id="build-and-configure-a-virtual-private-server-aka-droplet">Build and Configure a Virtual Private Server aka 'Droplet'</h3>
+<p>To set up a complete email server, you need a server with at least 1GB RAM. This guide is done on a $5/month DigitalOcean Droplet or VPS (virtual private server). I recommend <a href="https://m.do.co/c/285be2a21159">DigitalOcean</a> because it doesn’t block port 25, and is fairly user friendly. Additionally, if you are using a personal domain, 1 GB RAM with 25 GB Disk space should be sufficient to run everything you need.</p>
+<ol>
+<li>Once you have logged into your <a href="https://m.do.co/c/285be2a21159">DigitalOcean</a> portal, click on Droplets in the left hand navigation bar.
+<img src="" alt=""></li>
+<li>Under Distro choose: Ubuntu 18.04 x64</li>
+<li>Under Choose size: scrool left and click on 5/month</li>
+<li>Under datacenter region, pick the location closest to you. I am using <code>New York 1</code> for this guide.</li>
+<li>Under choose a hostname, you <strong>must</strong> make the Droplet hostname the same as your domain. so i wchanged mine to: mail.sillydomain.site</li>
+<li>Click Create</li>
+<li>In a few moments your Droplet will be available.</li>
+</ol>
+<blockquote>
+<p>SSH is a more secure way to access your Droplet, and should be used. However, for simplicity, I will do everyuthing via the built in Droplet console. You can find more inforamtion about using ssh to conenct to yoru Droplet here: <a href="https://www.digitalocean.com/docs/Droplets/how-to/connect-with-ssh/">How to Connect to Droplets with SSH</a></p>
+</blockquote>
+<ol start="8">
+<li>When your Droplet is available click the console button and login using <code>root</code> using the autogenerated password.</li>
+<li>Change the <code>root</code> password to something more memeorbale for you.</li>
+<li>You should now see a window similar to this</li>
+<li></li>
+</ol>
+<hr>
+<h3 id="updates-and-hostname">Updates and Hostname</h3>
+<ol>
+<li>First we need to update our Droplet to to the latest. Type the following into the console window.</li>
+</ol>
+<pre><code><div># sudo apt update
+# sudo apt upgrade
+</div></code></pre>
+<blockquote>
+<p>this process check for application updates and security pathes on your Droplet, then applies them.</p>
+</blockquote>
+<ol start="2">
+<li>Press Y</li>
+<li>If you see a screen like this, press Tab, then OK, to keep the local version currently installed.</li>
+<li>set a fully qualified domain name (FQDN) for your server with the following command.</li>
+</ol>
+<pre><code><div># sudo hostnamectl set-hostname mail.sillydomain.site
+</div></code></pre>
+<ol start="5">
+<li>also need to update /etc/hosts file.</li>
+</ol>
+<pre><code><div>sudo nano /etc/hosts
+</div></code></pre>
+<ol start="6">
+<li>dit it like below:</li>
+</ol>
+<pre><code><div>127.0.0.1 mail.sillydomain.site localhost
+</div></code></pre>
+<ol start="7">
+<li>Press Ctrl+X to Save</li>
+<li>Press Y</li>
+<li>Press Enter</li>
+<li>. To see the changes, re-login and then run the following command to see your hostname.sud</li>
+</ol>
+<pre><code><div>hostname -f
+</div></code></pre>
+<ol start="11">
+<li>If added correctly; you see have an output similar to this:</li>
+</ol>
+<pre><code><div>mail.sillydomain.site
+</div></code></pre>
+<hr>
+<h3 id="setting-up-iredmail-mail-server-on-ubuntu-1804">Setting up iRedMail Mail Server on Ubuntu 18.04</h3>
+<p>iRedMail is a shell script that automatically installs and configures all the necessary mail server components on your Linux server (Droplet), eliminating the need for manual installation and configuration. With iRedMail, you can easily create as many mailboxes as you want in a web-based admin panel. Mailboxes can be stored in MariaDB/MySQL, PostreSQL database or OpenLDAP. The Open-source software used in iRedMail is:</p>
+<ul>
+<li>Postfix SMTP server</li>
+<li>Dovecot IMAP server</li>
+<li>Nginx web server</li>
+<li>OpenLDAP, ldapd</li>
+<li>MySQL/MariaDB, PostgreSQL</li>
+<li>Amavised-new</li>
+<li>SpamAssassin</li>
+<li>ClamAV</li>
+<li>Roundcube webmail</li>
+<li>SOGo Groupware</li>
+<li>Fail2ban</li>
+<li>mlmmj mailing list manager</li>
+<li>Netdata server monitoring</li>
+<li>iRedAPD Postfix policy server for greylisting</li>
+</ul>
+<ol>
+<li>Type the following command to download the iRedMail Bash installer with <code>wget</code>. At the time of this writing, the latest version of iRedMail is <strong>0.9.9</strong>, released on December 17, 2018. Please go to iRedMail download page (<a href="http://www.iredmail.org/download.html">http://www.iredmail.org/download.html</a>)  to check for the latest version.</li>
+</ol>
+<pre><code><div># wget https://bitbucket.org/zhb/iredmail/downloads/iRedMail-0.9.9.tar.bz2
+</div></code></pre>
+<ol start="2">
+<li>Extract the tarball.</li>
+</ol>
+<pre><code><div># tar xvf iRedMail-0.9.9.tar.bz2
+</div></code></pre>
+<ol>
+<li>Naviagte into the newly created directory using <code>cd</code>.</li>
+</ol>
+<pre><code><div># cd iRedMail-0.9.9
+</div></code></pre>
+<ol start="4">
+<li>Add executable permissions to the <code>iRedMail.sh</code> script.</li>
+</ol>
+<pre><code><div># chmod +x iRedMail.sh
+</div></code></pre>
+<ol start="5">
+<li>Next, run the Bash script with sudo privilege.</li>
+</ol>
+<pre><code><div>$ sudo bash iRedMail.sh
+</div></code></pre>
+<ol start="6">
+<li>You should now see the iRedMail installer</li>
+</ol>
+<p><img src="http://i66.tinypic.com/jkan83.png" alt=""></p>
+<ol start="7">
+<li>Click Yes (Enter)</li>
+<li>You can use the default storage location which will be <code>/var/vmail</code>, press Enter.</li>
+</ol>
+<p><img src="http://i64.tinypic.com/2q0qblu.png" alt=""></p>
+<ol start="9">
+<li>It’s <strong>highly recommended</strong> that you choose to run a web server because you need the web-based Admin Panel to add email accounts, domains, and users. Also it allows you to access the Roundcube webmail. By default, Nginx web server is selected, so you can simply press Enter.  (<em>An asterisk indicates the item is selected and will reprsent that for the rest of this guide</em>.)</li>
+</ol>
+<p><img src="http://i63.tinypic.com/fo18xs.png" alt=""></p>
+<ol start="10">
+<li>Select a storage type. This guide uses <code>MariaDB</code>. Press up and down arrow key and press the space bar to select.</li>
+</ol>
+<p><img src="http://i63.tinypic.com/10qzyuw.png" alt=""></p>
+<ol>
+<li>If you select MariaDB or MySQL, then you will need to set a <code>root</code> password.</li>
+</ol>
+<blockquote>
+<p>If you are unsure which to use, choose MariaDB.</p>
+</blockquote>
+<p><img src="http://i67.tinypic.com/29o5u85.png" alt=""></p>
+<ol start="12">
+<li>Enter your first mail address. You can add additional mail: domains, addresses, and users, later in the Admin Aanel. This guide assumes that you want an email account like <code>john.doe@your-domain.com</code> or <code>admin@sillydomain.site</code></li>
+</ol>
+<p><img src="http://i67.tinypic.com/fa4gwi.png" alt=""></p>
+<blockquote>
+<p><strong>Do not press the space bar after your domain name!</strong> iRedMail will copy the space character along with your domain name, which will result in installation failure.</p>
+</blockquote>
+<ol start="13">
+<li>Set a <em>strong</em> password for the mail domain administrator.</li>
+</ol>
+<p><img src="http://i66.tinypic.com/73cxub.png" alt=""></p>
+<ol start="14">
+<li>Choose additional components. By default, the following four items are selected:
+<ul>
+<li>RoundCube Mail (WebMail Client)</li>
+<li>netdata (System Monitor)</li>
+<li>iRedAdmin (Web based Admin Panel)</li>
+<li>Fail2ban (Prevents Brute Force attacks)</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>Unless you <strong>need</strong> SOGo groupware, <em>dont select it</em>, press Enter.</p>
+</blockquote>
+<p><img src="http://i65.tinypic.com/35iq8au.png" alt=""></p>
+<ol start="15">
+<li>Now you can review your configurations. Type <code>Y</code> to begin the installation of the iRedMail components.</li>
+</ol>
+<p><img src="http://i63.tinypic.com/htvjwj.png" alt=""></p>
+<blockquote>
+<p>This will take a bit of time. Treat yourself to a :coffee:, :tea:, :beer:, :wine_glass: or :tropical_drink:, you deserve it!</p>
+</blockquote>
+<ol start="16">
+<li>
+<p>At the end of installation, type <code>Y</code> to use firewall rules provided by iRedMail and restart the firewall.</p>
+</li>
+<li>
+<p>When the installation is complete you will see a message that says <code>Congratulations, mail server setup completed successfully...</code> like below.</p>
+</li>
+</ol>
+<p><img src="http://i63.tinypic.com/110w4up.png" alt=""></p>
+<blockquote>
+<p>The password you created will be displayed in <em>clear text</em>; I have redacted it from this screenshot.</p>
+</blockquote>
+<ol start="18">
+<li>Reboot your Ubuntu 18.04 server (Droplet).</li>
+</ol>
+<pre><code><div># sudo shutdown -r now
+</div></code></pre>
+<p>The iRedMail installation is complete! The <code>iRedMail.tips</code> file contains important information about your iRedMail server.</p>
+<p>You can locate this file by navigating to:</p>
+<pre><code><div># cd iRedMail-0.9.9
+# sudo nano iRedMail.tips
+</div></code></pre>
+<hr>
+<h3 id="installing-a-tls-certificate">Installing A TLS Certificate</h3>
+<p>Since the mail server is using a self-signed TLS certificate, both desktop mail client users and webmail client users will see a warning when connecting. To fix this, we can obtain and install a free Let’s Encrypt TLS certificate.</p>
+<ol>
+<li>Install the Let’s Encrypt (Certbot) client:</li>
+</ol>
+<pre><code><div># sudo apt install software-properties-common
+</div></code></pre>
+<blockquote>
+<p>This installs the prerequisites for Certbot.</p>
+</blockquote>
+<ol start="2">
+<li>Add the Certbot repo to your server.</li>
+</ol>
+<pre><code><div># sudo add-apt-repository ppa:certbot/certbot
+</div></code></pre>
+<blockquote>
+<p>This adds the Certbot software and dependencies.</p>
+</blockquote>
+<ol start="3">
+<li>Press <code>Enter</code> to continue.</li>
+<li>Install the Certbot software.</li>
+</ol>
+<pre><code><div>$ sudo apt install certbot
+</div></code></pre>
+<blockquote>
+<p>This install the Certbot software to create your certificate.</p>
+</blockquote>
+<ol start="5">
+<li>Type <code>Y</code> to continue.</li>
+</ol>
+<p>iRedMail has already configured TLS settings in the default Nginx virtual host, so here I recommend using the webroot plugin, instead of nginx plugin, to obtain certificate. Run the following command. Replace red text with your actual data</p>
+<pre><code><div># sudo certbot certonly --webroot --agree-tos --email postmaster@sillydomain.site -d mail.sillydomain.site -w /var/www/html/
+</div></code></pre>
+<ol start="6">
+<li>When it asks you if you want to receive communications from EFF, you can choose No.</li>
+</ol>
+<p><img src="" alt=""></p>
+<p>If everything went well, you will see the following text indicating that you have successfully obtained a TLS certificate. Your certificate and chain have been saved at /etc/letsencrypt/live/mail.your-domain.com/ directory.</p>
+<hr>
+<h3 id="to-do">To Do:</h3>
+<ul>
+<li>Write/Test against AWS Ubuntu:
+<ul>
+<li>18.10 x64</li>
+<li>18.04 x64</li>
+<li>16.04 x64</li>
+</ul>
+</li>
+<li>Write/Test against DigitalOcean Ubuntu
+<ul>
+<li><s>18.04</s></li>
+<li>16.04</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="help">Help!</h2>
+<p>Google is your friend. Start there.</p>
+<ol>
+<li>Your commands didn't work!
+<ol>
+<li>Yes they did/do. You mistyped something.</li>
+</ol>
+</li>
+<li>No I didnt!
+<ol>
+<li>Yes.  You did.</li>
+</ol>
+</li>
+<li>I am having a problem with DigitalOcean.
+<ol>
+<li>Google</li>
+<li>Check <a href="https://www.digitalocean.com/community">DigitalOcean Community</a></li>
+<li><a href="https://cloudsupport.digitalocean.com/s/">DigitalOcean Support</a></li>
+</ol>
+</li>
+<li>I have an issue with iRedMail.
+<ol>
+<li>Check the iRedMail documentation <a href="https://docs.iredmail.org/index.html">here</a></li>
+</ol>
+</li>
+<li>I found a bug in iRedMail!
+<ol>
+<li>Way to go! Report it directly to iRedMail <a href="https://bitbucket.org/zhb/iredmail/issues?status=new&amp;status=open">here</a></li>
+</ol>
+</li>
+<li>I have a suggestion/improvement/recommendation for you.
+<ol>
+<li>Great! Theres a couple of options:</li>
+<li>Open a PR, and I will review.</li>
+<li>Open a new issue.</li>
+<li>Email me.</li>
+</ol>
+</li>
+</ol>
+<hr>
+<h2 id="credits">Credits</h2>
+<p>Thank You to the following organizations who made this guide possible:</p>
+<ul>
+<li>DigitalOcean (For allowing me to abuse their system way more then I should have.)</li>
+<li>GitHub (For hosting this guide.)</li>
+</ul>
+<hr>
+<h2 id="license">License</h2>
+<p>&quot;THE BEER-WARE LICENSE&quot; (Revision 42):
+<a href="mailto:jerry@0host.us">jerry@0host.us</a> wrote this file.  As long as you retain this notice you
+can do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return.<br>
+~ Jerry @ 0Host</p>
+<hr>
+<h2 id="contact">Contact</h2>
+<hr>
+<h2 id="support-on-beerpay">Support on Beerpay</h2>
+<p>Hey dude! Help me out for a couple of :beers:!</p>
+<p><a href="https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server"><img src="https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server/badge.svg?style%3Dbeer-square" alt="Beerpay"></a>  <a href="https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server"><img src="https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server/make-wish.svg?style%3Dflat" alt="Beerpay"></a></p>
+
+    </body>
+    </html>

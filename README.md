@@ -2,12 +2,13 @@
 ![](https://img.shields.io/github/last-commit/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server.svg)
 [![](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://github.com/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server)
 
-## This guide will show you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04 on a VPS (Virtual Private Server), allowing you to take control of your email.  :envelope:
+
+
+## This guide will show you how to use iRedMail to quickly set up a VPS (Virtual Private Server) running Ubuntu 18.04 with iRedMail, allowing you to take control of your email.  :envelope:
 
 ### Why should I host my own email? If your not interested in the myriad of reasons of why you **should** host your own email, feel free to scroll past this and dive into the nitty-gritty.
 ***
 ### For those interested in a short privacy and security rant:
-
 You need not look any further then media headlines regarding recent data breaches which expose **your** personally identifying information [PII](https://en.wikipedia.org/wiki/Personally_identifiable_information) and sensitive personal information [SPI](https://en.wikipedia.org/wiki/Personally_identifiable_information) to the world: 
 
 [Millions of of loand mortgage documents leaked online](https://techcrunch.com/2019/01/23/financial-files/)  :fearful:
@@ -41,7 +42,7 @@ The long and short of it is:
 - Manage
 - Maintain 
 
-A secured personal email server.
+A secured personal email server with your own domain.
 ***
 ### Hints, Tips, and Disclosures
 #### Hints
@@ -55,11 +56,10 @@ SSH with [PuTTY](https://www.putty.org/) is your friend. It will make your insta
 ```
 These are code/commands and you can copy and paste this if you are using PuTTY with SSH
 ```
-
 #### Disclosure(s)
 This guide was tested, configured, and verified on Digital Ocean (due to cost). Most of the DigitalOcean links include *my* referral code, which helps me cover the cost of my Droplets. If you dont want to use my referral code, you can sign up directly at [DigitalOcean](https://www.digitalocean.com/)
 ***
-### Prerequisties & Assumption
+### Prerequisites & Assumption
 - Domain name
   - Not required if you just want to test the install.
   - I prefer (used) [Namecheap.com](https://www.namecheap.com/) due to good pricing and a strong Anti-SOPA stance.
@@ -79,7 +79,7 @@ This guide was tested, configured, and verified on Digital Ocean (due to cost). 
 ***
 ### DNS
 
-We dont want to have to deal with DNS in multiple places, so were going to have DigitalOcean manage DNS for us.
+We dont want to have to deal with DNS in multiple places, so were going to have DigitalOcean manage DNS.
 
 1. Scroll down to the Nameservers section of your Domain Control Panel in Namecheap.
 2. Change your Nameservers choice from *Namecheap Basic DNS* to *Custom DNS*.
@@ -93,7 +93,7 @@ ns2.digitalocean.com
 ns3.digitalocean.com
 ```
 Like below:
-![sillydomain-ns123](http://i66.tinypic.com/2jeuyaa.png)
+![](http://i66.tinypic.com/2jeuyaa.png)
 
 4. Click the Green Check mark to commit that changes. 
 5. Your DNS is now being pointed to [DigitalOcean](www.digitalocean.com) to manage. In my experience this was updated in about 30 minutes, but it _can_ take up to 48 hours.
@@ -101,7 +101,7 @@ Like below:
 ### DNS and MX Records
 The MX record specifies which host or hosts handle emails for a particular domain name. For example, the host that handles emails for `sillydomain.site` is `mail.sillydomain.site`. If someone with a Gmail account sends an email to `somebody@sillydomain.site`, then Gmail server will query the MX record of `sillydomain.site`. When it finds out that `mail.sillydomain.site` is responsible for accepting email, it then query the A record of `mail.sillydomain.site` to get the IP address, thus the email can be delivered.
 
-Since [DigitalOcean](https://m.do.co/c/285be2a21159) is managing our DNS, this becomes a *fairly* painless process.
+Since [DigitalOcean](https://m.do.co/c/285be2a21159) is managing the DNS, this becomes a *fairly* painless process.
 
 >If you have not already created an account, go to [DigitalOcean](https://m.do.co/c/285be2a21159) and sign up for an account.
 
@@ -113,7 +113,7 @@ Since [DigitalOcean](https://m.do.co/c/285be2a21159) is managing our DNS, this b
 
 ![](http://i65.tinypic.com/j9aiqv.png)
 
-3. Enter the Domain Name and click Add Domain
+3. Enter the Domain Name and click *Add Domain*
 
 ![](http://i66.tinypic.com/2pqp5ki.png)
 
@@ -183,7 +183,7 @@ sudo nano /etc/hosts
 ```
 hostname -f
 ```
-11. If performed correctly; you should have an output similar to this:
+11. If added correctly; you see have an output similar to this:
 ```
 mail.sillydomain.site
 ```
@@ -292,25 +292,23 @@ You can locate this file by navigating to:
 # sudo nano iRedMail.tips
 ```
 ***
-### Installing A TLS Certificate
+### Installing a TLS Certificate
 Since the mail server is using a self-signed TLS certificate, both desktop mail client users and webmail client users will see a warning when connecting. To fix this, we can obtain and install a free Let’s Encrypt TLS certificate.
 
 1. Install the Let’s Encrypt (Certbot) client:
 ```
 # sudo apt install software-properties-common
 ```
->This installs the prerequisites for Certbot.
+
 2. Add the Certbot repo to your server.
 ```
 # sudo add-apt-repository ppa:certbot/certbot
 ```
->This adds the Certbot software and dependencies.
 3. Press `Enter` to continue.
 4. Install the Certbot software.
 ```
 $ sudo apt install certbot
 ```
->This install the Certbot software to create your certificate.
 5. Type `Y` to continue.
 
 iRedMail has already configured TLS settings in the default Nginx virtual host, so here I recommend using the webroot plugin, instead of nginx plugin, to obtain certificate. Run the following command. Replace red text with your actual data
@@ -319,17 +317,80 @@ iRedMail has already configured TLS settings in the default Nginx virtual host, 
 ```
 6. When it asks you if you want to receive communications from EFF, you can choose No.
 
-![]()
+![](http://i66.tinypic.com/98ye7b.png)
 
 If everything went well, you will see the following text indicating that you have successfully obtained a TLS certificate. Your certificate and chain have been saved at /etc/letsencrypt/live/mail.your-domain.com/ directory.
 ***
+### Installing the Certificate in Nginx
+1.  configure Nginx web server to use it. Edit the SSL template file.
+```
+sudo nano /etc/nginx/templates/ssl.tmpl
+```
+2. Find the following 2 lines.
+```
+ssl_certificate /etc/ssl/certs/iRedMail.crt;
+ssl_certificate_key /etc/ssl/private/iRedMail.key;
+```
+3. Replace them with:
+```
+ssl_certificate /etc/letsencrypt/live/mail.your-domain.com/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/mail.your-domain.com/privkey.pem;
+```
+4. Save and close the file. Then test nginx configuration and reload.
+```
+sudo nginx -t
+sudo systemctl reload nginx
+```
+Visit iRedMail admin panel again, your web browser won’t warn you any more because Nginx is now using a valid TLS certificate.
+***
+### Installing TLS Certificate in Postfix and Dovecot
+We also need to configure Postfix SMTP server and Dovecot IMAP server to use the Let’s Encrypt issued certificate so that desktop mail client won’t display security warning. Edit the main configuration file of Postfix.
+```
+sudo nano /etc/postfix/main.cf
+```
+Find the following 3 lines. (line 95, 96, 97).
+```
+smtpd_tls_key_file = /etc/ssl/private/iRedMail.key
+smtpd_tls_cert_file = /etc/ssl/certs/iRedMail.crt
+smtpd_tls_CAfile = /etc/ssl/certs/iRedMail.crt
+```
+Replace them with:
+```
+smtpd_tls_key_file = /etc/letsencrypt/live/mail.your-domain.com/privkey.pem
+smtpd_tls_cert_file = /etc/letsencrypt/live/mail.your-domain.com/cert.pem
+smtpd_tls_CAfile = /etc/letsencrypt/live/mail.your-domain.com/chain.pem
+```
+Save and close the file. Then reload Postfix.
+```
+sudo systemctl reload postfix
+```
+Next, edit the main configuration file of Dovecot.
+```
+sudo nano /etc/dovecot/dovecot.conf
+```
+Fine the following 2 lines. (line 47, 48)
+```
+ssl_cert = </etc/ssl/certs/iRedMail.crt
+ssl_key = </etc/ssl/private/iRedMail.key
+```
+Replace them with:
+```
+ssl_cert = </etc/letsencrypt/live/mail.your-domain.com/fullchain.pem
+ssl_key = </etc/letsencrypt/live/mail.your-domain.com/privkey.pem
+```
+Save and close the file. Then reload dovecot.
+```
+sudo systemctl reload dovecot
+```
+From now on, desktop mail users won’t see security warnings.
 ### To Do:
 - Write/Test against AWS Ubuntu:
   -  18.10 x64
   -  18.04 x64 
   -  16.04 x64 
 - Write/Test against DigitalOcean Ubuntu 
-  -   ~~18.04~~
+  - 18.10 x64
+  -   ~~18.04~~ (Completed: This guide)
   -  16.04 
 ***
 ## Help!
@@ -345,7 +406,7 @@ Google is your friend. Start there.
 4. I have an issue with iRedMail.
    1. Check the iRedMail documentation [here](https://docs.iredmail.org/index.html)
 5. I found a bug in iRedMail!
-   1. Way to go! Report it directly to iRedMail [here](https://bitbucket.org/zhb/iredmail/issues?status=new&status=open)
+   1. Way to go! Report it directly to iRedMail [here](https://bitbucket.org/zhb/iredmail/issues?status=new&status=open).
 6. I have a suggestion/improvement/recommendation for you.
    1. Great! Theres a couple of options:
    2. Open a PR, and I will review.
@@ -364,8 +425,9 @@ can do whatever you want with this stuff. If we meet some day, and you think thi
 ~ Jerry @ 0Host
 ***
 ## Contact
+Feel free to email me jerry@0host.us. Mahalo!  :palm_tree:
 ***
 ## Support on Beerpay
 Hey dude! Help me out for a couple of :beers:!
 
-[![Beerpay](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server/badge.svg?style=beer-square)](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server)  
+[![Beerpay](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server/badge.svg?style=beer-square)](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server)  [![Beerpay](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server/make-wish.svg?style=flat)](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server)
