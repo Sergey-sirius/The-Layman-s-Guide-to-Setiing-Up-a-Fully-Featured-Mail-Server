@@ -395,3 +395,8 @@ this stuff is worth it, you can buy me a beer in return.
 
 
 Test Commit 2
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server/badge.svg?style=beer-square)](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server)  [![Beerpay](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server/make-wish.svg?style=flat-square)](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server?focus=wish)
