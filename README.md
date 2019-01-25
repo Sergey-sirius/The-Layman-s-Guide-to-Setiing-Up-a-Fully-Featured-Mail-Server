@@ -1,9 +1,8 @@
 # A Layman's Guide to Setting Up a Fully Featured Mail Server
-
 ![](https://img.shields.io/github/last-commit/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server.svg)
 [![](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://github.com/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server)
 
-## This guide will be showing you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04 on a VPS (Virtual Private Server), allowing you to take control of your email.  :envelope:
+## This guide will show you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04 on a VPS (Virtual Private Server), allowing you to take control of your email.  :envelope:
 
 ### Why should I host my own email? If your not interested in the myriad of reasons of why you **should** host your own email, feel free to scroll past this and dive into the nitty-gritty.
 ***
@@ -207,7 +206,7 @@ iRedMail is a shell script that automatically installs and configures all the ne
 - Netdata server monitoring
 - iRedAPD Postfix policy server for greylisting
 
-1. Type the following command to download the iRedMail Bash installer with `wget`. At the time of this writing, the latest version of iRedMail is 0.9.9, released on December 17, 2018. Please go to iRedMail download page (http://www.iredmail.org/download.html)  to check for the latest version.
+1. Type the following command to download the iRedMail Bash installer with `wget`. At the time of this writing, the latest version of iRedMail is **0.9.9**, released on December 17, 2018. Please go to iRedMail download page (http://www.iredmail.org/download.html)  to check for the latest version.
 ```
 # wget https://bitbucket.org/zhb/iredmail/downloads/iRedMail-0.9.9.tar.bz2
 ```
@@ -290,8 +289,6 @@ The iRedMail installation is complete! The `iRedMail.tips` file contains importa
 You can locate this file by navigating to:
 ```
 # cd iRedMail-0.9.9
-```
-```
 # sudo nano iRedMail.tips
 ```
 ***
