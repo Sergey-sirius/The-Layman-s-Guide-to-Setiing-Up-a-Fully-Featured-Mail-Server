@@ -385,4 +385,24 @@ Thank You to the following organizations who made this guide possible:
 "THE BEER-WARE LICENSE" (Revision 42):
 <jerry@0host.us> wrote this file.  As long as you retain this notice you
 can do whatever you want with this stuff. If we meet some day, and you think
+<<<<<<< HEAD
 this stuff is worth it, you can buy me a beer in return.   
+=======
+this stuff is worth it, you can buy me a beer in return.   
+
+~ Jerry @ 0Host
+***
+## Donations
+
+***
+## Contact
+
+
+Test Commit 2
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server/badge.svg?style=beer-square)](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server)  
+
+blah
