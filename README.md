@@ -1,12 +1,14 @@
-# The Layman's Guide to Setiing Up a Fully Featured Mail Server
+# A Layman's Guide to Setting Up a Fully Featured Mail Server
 
-## This guide will be showing you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04, allowing you to take control of your email.  :envelope:
+## This guide will be showing you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04 on a VPS (Virtual Private Server), allowing you to take control of your email.  :envelope:
 
 ### Why should I host my own email? If your not interested in the myriad of reasons of why you **should** host your own email, feel free to scroll past this and dive into the nitty-gritty.
 ***
-### For those interested in a small privacy and security rant:
+### For those interested in a short privacy and security rant:
 
-### You need not look any further then media headlines regarding recent data breaches which expose **your** personally identifying information [PII](https://en.wikipedia.org/wiki/Personally_identifiable_information) and sensitive personal information [SPI](https://en.wikipedia.org/wiki/Personally_identifiable_information) to the world: 
+You need not look any further then media headlines regarding recent data breaches which expose **your** personally identifying information [PII](https://en.wikipedia.org/wiki/Personally_identifiable_information) and sensitive personal information [SPI](https://en.wikipedia.org/wiki/Personally_identifiable_information) to the world: 
+
+[Millions of of loand mortgage documents leaked online](https://techcrunch.com/2019/01/23/financial-files/)  :fearful:
 
 [Equifax Data Breach](https://www.ftc.gov/equifax-data-breach) :sob:
 
@@ -37,23 +39,32 @@ The long and short of it is:
 - Manage
 - Maintain 
 
-A secured email server.
+A secured personal email server.
 ***
-### Hints and Tips and DIscolsures
-I have done the legwork and types **ALL** of these commands manually to test, and it does work. I promise. I did it enough times, that the commands work.
+### Hints, Tips, and Disclosures
+#### Hints
+I have done the legwork and typed **ALL** of these commands manually in testing this guide. They all work; *if typed correctly*.
 
-SSH is your friend. It will make your install much easier.\
+SSH with [PuTTY](https://www.putty.org/) is your friend. It will make your install much easier.
 
-I am platform agnostic (I am also AWS Certified). This install was tested/configured/ and verified on Digital Ocean (initially due to cost). All the Digital Ocean links **do** include my referral code. that hels me cover the cost of my droplets. If you dont want to use my referral code, that is understandable, and you can sign up directly.
+#### Tips
+>These are notes, and contain useful information.
 
+```
+These are code/commands and you can copy and paste this if you are using PuTTY with SSH
+```
+
+#### Disclosure(s)
+This guide was tested, configured, and verified on Digital Ocean (due to cost). Most of the DigitalOcean links include *my* referral code, which helps me cover the cost of my Droplets. If you dont want to use my referral code, you can sign up directly at [DigitalOcean](https://www.digitalocean.com/)
+***
 ### Prerequisties & Assumption
 - Domain name
   - Not required if you just want to test the install.
-  - I prefer (use) [Namecheap.com](https://www.namecheap.com/) due to good pricing and a strong Anti-SOPA stance.
-- VPS with Ubuntu 18.04 x64
-  - I prefer (use) [DigitalOcean](https://m.do.co/c/285be2a21159).
-- Familiarity using Linux from either CLI or Console
-- Anywhere you see `sillydomain.site` substitute for **your** domain.
+  - I prefer (used) [Namecheap.com](https://www.namecheap.com/) due to good pricing and a strong Anti-SOPA stance.
+- Virtual Private Server (Droplet) running `Ubuntu 18.04 x64`
+  - I prefer (used) [DigitalOcean](https://m.do.co/c/285be2a21159).
+- Familiarity using Linux from the Command Line (CLI)
+- Anywhere you see `mail.sillydomain.site` **or** `sillydomain.site` substitute for **your** domain.
 ***
 ### Buy a Domain
 1. Head to [Namecheap.com](www.namecheap.com).
@@ -66,9 +77,9 @@ I am platform agnostic (I am also AWS Certified). This install was tested/config
 ***
 ### DNS
 
-I dont want to have to deal with DNS in multiple places, so I am going to have DigitalOcean manage my DNS for me.
+We dont want to have to deal with DNS in multiple places, so were going to have DigitalOcean manage DNS for us.
 
-1. Scroll down to the Nameservers section of your Domain Control Panel.
+1. Scroll down to the Nameservers section of your Domain Control Panel in Namecheap.
 2. Change your Nameservers choice from *Namecheap Basic DNS* to *Custom DNS*.
 
 ![](http://i67.tinypic.com/2ronuvp.png)
@@ -93,23 +104,30 @@ Since [DigitalOcean](https://m.do.co/c/285be2a21159) is managing our DNS, this b
 >If you have not already created an account, go to [DigitalOcean](https://m.do.co/c/285be2a21159) and sign up for an account.
 
 1. Once you have logged into your [DigitalOcean](https://m.do.co/c/285be2a21159) portal, click on Networking in the left hand navigation bar.
-![do-networking](http://i68.tinypic.com/29puhc9.png)
+
+![](http://i68.tinypic.com/29puhc9.png)
 
 2. Click on Domains
-![do-networking-add-domain](http://i65.tinypic.com/j9aiqv.png)
+
+![](http://i65.tinypic.com/j9aiqv.png)
 
 3. Enter the Domain Name and click Add Domain
-![do-networking-add-domain-add](http://i66.tinypic.com/2pqp5ki.png)
+
+![](http://i66.tinypic.com/2pqp5ki.png)
 
 4. We can now create a new MX record for our domain name. Under `Create a new record,` click on `MX`
-![do-networking-add-mx](http://i63.tinypic.com/r8ytxu.png)
 
-1. Enter `@` in the Hostame field, enter `mail.sillydomain.site` in Mail Providers Mail Server Value field, enter `10` in the Priotity field, and `1800` in the TTL Field.
+![](http://i63.tinypic.com/r8ytxu.png)
+
+5. Enter `@` in the Hostame field, enter `mail.sillydomain.site` in Mail Providers Mail Server Value field, enter `10` in the Priotity field, and `1800` in the TTL Field.
+
 ![](http://i66.tinypic.com/20p1mok.png)
 6. Click Create Record.
 7. You will nowe have a new record, as shown below.
+
 ![](http://i66.tinypic.com/2ijp8pw.png)
 8.  After creating MX record, you also need to create an `A` record for `mail.sillydomain.site` , so that it can be resolved to an IP address.
+
 9.  Click on Networking in the left hand navigation bar.
 10. Click on the your domain name.
 11. We can now create a new MX record for our domain name. Under `Create a new record,` click on `A`
@@ -118,14 +136,14 @@ Since [DigitalOcean](https://m.do.co/c/285be2a21159) is managing our DNS, this b
 This record will allow you to connect to the iRedMail Admin panel via Hostname instead of IP address after the install.
 >You will be addding more DNS records later in this guide, but this is a good primer to get stareted.
 ***
-### Build and Configure a VPS aka 'Droplet'
-To set up a complete email server, you need a server with at least 1GB RAM. This guide is done on a $5/month DigitalOcean Droplet or VPS (virtual private server). I recommend [DigitalOcean](https://m.do.co/c/285be2a21159) because it doesn’t block port 25, and is fairly user friendly. Additionally, if you are using a personal domain, 1 GB RAM with 25 GB Disk space should be sufficent to run everything you need.
+### Build and Configure a Virtual Private Server aka 'Droplet'
+To set up a complete email server, you need a server with at least 1GB RAM. This guide is done on a $5/month DigitalOcean Droplet or VPS (virtual private server). I recommend [DigitalOcean](https://m.do.co/c/285be2a21159) because it doesn’t block port 25, and is fairly user friendly. Additionally, if you are using a personal domain, 1 GB RAM with 25 GB Disk space should be sufficient to run everything you need.
 
 1. Once you have logged into your [DigitalOcean](https://m.do.co/c/285be2a21159) portal, click on Droplets in the left hand navigation bar.
-![do-Droplets]()
+![]()
 2. Under Distro choose: Ubuntu 18.04 x64
 3. Under Choose size: scrool left and click on 5/month
-4. Under datacenter region, pick the location closest to you. I am choosing New York 1 for this guide.
+4. Under datacenter region, pick the location closest to you. I am using `New York 1` for this guide.
 5. Under choose a hostname, you **must** make the Droplet hostname the same as your domain. so i wchanged mine to: mail.sillydomain.site
 6. Click Create
 7. In a few moments your Droplet will be available.
@@ -159,7 +177,7 @@ sudo nano /etc/hosts
 7. Press Ctrl+X to Save
 8. Press Y
 9. Press Enter
-10. . To see the changes, re-login and then run the following command to see your hostname.
+10. . To see the changes, re-login and then run the following command to see your hostname.sud  
 ```
 hostname -f
 ```
@@ -168,8 +186,8 @@ hostname -f
 mail.sillydomain.site
 ```
 ***
-### Setting up iRedMail Mail Server on Ubuntu 18.04 with 
-iRedMail is a shell script that automatically installs and configures all the necessary mail server components on your Linux server (Droplet), eliminating manual installation and configuration. With iRedMail, you can easily create as many mailboxes as you want in a web-based admin panel. Mailboxes can be stored in MariaDB/MySQL, PostreSQL database or OpenLDAP. The Open-source software used in iRedMail is:
+### Setting up iRedMail Mail Server on Ubuntu 18.04 
+iRedMail is a shell script that automatically installs and configures all the necessary mail server components on your Linux server (Droplet), eliminating the need for manual installation and configuration. With iRedMail, you can easily create as many mailboxes as you want in a web-based admin panel. Mailboxes can be stored in MariaDB/MySQL, PostreSQL database or OpenLDAP. The Open-source software used in iRedMail is:
 
 - Postfix SMTP server
 - Dovecot IMAP server
@@ -186,7 +204,7 @@ iRedMail is a shell script that automatically installs and configures all the ne
 - Netdata server monitoring
 - iRedAPD Postfix policy server for greylisting
 
-1. Type the following command download the iRedMail Bash installer with `wget`. At the time of this writing, the latest version of iRedMail is 0.9.9, released on December 17, 2018. Please go to iRedMail download page (http://www.iredmail.org/download.html)  to check for the latest version.
+1. Type the following command to download the iRedMail Bash installer with `wget`. At the time of this writing, the latest version of iRedMail is 0.9.9, released on December 17, 2018. Please go to iRedMail download page (http://www.iredmail.org/download.html)  to check for the latest version.
 ```
 # wget https://bitbucket.org/zhb/iredmail/downloads/iRedMail-0.9.9.tar.bz2
 ```
@@ -198,7 +216,7 @@ iRedMail is a shell script that automatically installs and configures all the ne
 ```
 # cd iRedMail-0.9.9
 ```
-4. Add executable permissions to the iRedMail.sh script.
+4. Add executable permissions to the `iRedMail.sh` script.
 ```
 # chmod +x iRedMail.sh
 ```
@@ -226,7 +244,7 @@ $ sudo bash iRedMail.sh
 1.  If you select MariaDB or MySQL, then you will need to set a `root` password.
 >If you are unsure which to use, choose MariaDB.
 
-![](http://i65.tinypic.com/vgr3up.png)
+![](http://i67.tinypic.com/29o5u85.png)
 
 12.  Enter your first mail address. You can add additional mail: domains, addresses, and users, later in the Admin Aanel. This guide assumes that you want an email account like `john.doe@your-domain.com` or `admin@sillydomain.site`
 
@@ -314,11 +332,61 @@ If everything went well, you will see the following text indicating that you hav
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 ***
-### To Do
+### To Do:
 - Write/Test against AWS Ubuntu:
-  -  ~~18.04 LTS~~
-  -  16.04 LTS
+  -  18.10 x64
+  -  18.04 x64 
+  -  16.04 x64 
 - Write/Test against DigitalOcean Ubuntu 
-  -   ~~18.04 LTS~~
-  -  16.04 LTS
+  -   ~~18.04~~
+  -  16.04 
+***
+## Help!
+Google is your friend. Start there.
+1. Your commands didn't work!
+   1. Yes they did/do. You mistyped something.
+2. No I didnt!
+   1. Yes.  You did.
+3. I am having a problem with DigitalOcean.
+   1. Google
+   2. Check [DigitalOcean Community](https://www.digitalocean.com/community)
+   3. [DigitalOcean Support](https://cloudsupport.digitalocean.com/s/)
+4. I have an issue with iRedMail.
+   1. Check the iRedMail documentation [here](https://docs.iredmail.org/index.html)
+5. I found a bug in iRedMail!
+   1. Way to go! Report it directly to iRedMail [here](https://bitbucket.org/zhb/iredmail/issues?status=new&status=open)
+6. I have a suggestion/improvement/recommendation for you.
+   1. Great! Theres a couple of options:
+   2. Open a PR, and I will review.
+   3. Open a new issue.
+   4. Email me directly. My contact info is in the Contact section.
+***
+## Credits
+Thank You to the following organizations who made this guide possible:
+ - DigitalOcean (For allowing me to abuse their system way more then I should have.)
+ - GitHub (For hosting this guide.) 
+***
+## License
+"THE BEER-WARE LICENSE" (Revision 42):
+<jerry@0host.us> wrote this file.  As long as you retain this notice you
+can do whatever you want with this stuff. If we meet some day, and you think
+this stuff is worth it, you can buy me a beer in return.   
+
+~ Jerry @ 0Host
+***
+## Donations
+
+***
+## Contact
