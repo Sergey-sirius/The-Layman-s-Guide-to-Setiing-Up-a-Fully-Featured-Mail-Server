@@ -1,6 +1,7 @@
 # A Layman's Guide to Setting Up a Fully Featured Mail Server
 
 ![](https://img.shields.io/github/last-commit/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server.svg)
+[![](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://github.com/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server)
 
 ## This guide will be showing you how to use iRedMail to quickly set up a full-featured mail server on Ubuntu 18.04 on a VPS (Virtual Private Server), allowing you to take control of your email.  :envelope:
 
@@ -295,7 +296,7 @@ You can locate this file by navigating to:
 ```
 ***
 ### Installing A TLS Certificate
-Since the mail server is using a self-signed TLS certificate, both desktop mail client users and webmail client users will see a warning. To fix this, we can obtain and install a free Let’s Encrypt TLS certificate.
+Since the mail server is using a self-signed TLS certificate, both desktop mail client users and webmail client users will see a warning when connecting. To fix this, we can obtain and install a free Let’s Encrypt TLS certificate.
 
 1. Install the Let’s Encrypt (Certbot) client:
 ```
@@ -324,27 +325,6 @@ iRedMail has already configured TLS settings in the default Nginx virtual host, 
 ![]()
 
 If everything went well, you will see the following text indicating that you have successfully obtained a TLS certificate. Your certificate and chain have been saved at /etc/letsencrypt/live/mail.your-domain.com/ directory.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ***
 ### To Do:
 - Write/Test against AWS Ubuntu:
@@ -373,36 +353,22 @@ Google is your friend. Start there.
    1. Great! Theres a couple of options:
    2. Open a PR, and I will review.
    3. Open a new issue.
-   4. Email me directly. My contact info is in the Contact section.
+   4. Email me.
 ***
 ## Credits
 Thank You to the following organizations who made this guide possible:
  - DigitalOcean (For allowing me to abuse their system way more then I should have.)
  - GitHub (For hosting this guide.) 
 ***
-## Contact
 ## License
 "THE BEER-WARE LICENSE" (Revision 42):
 <jerry@0host.us> wrote this file.  As long as you retain this notice you
-can do whatever you want with this stuff. If we meet some day, and you think
-<<<<<<< HEAD
-this stuff is worth it, you can buy me a beer in return.   
-=======
-this stuff is worth it, you can buy me a beer in return.   
-
+can do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return.   
 ~ Jerry @ 0Host
 ***
-## Donations
-
-***
 ## Contact
-
-
-Test Commit 2
-
+***
 ## Support on Beerpay
 Hey dude! Help me out for a couple of :beers:!
 
 [![Beerpay](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server/badge.svg?style=beer-square)](https://beerpay.io/0hostus/The-Layman-s-Guide-to-Setiing-Up-a-Fully-Featured-Mail-Server)  
-
-blah
