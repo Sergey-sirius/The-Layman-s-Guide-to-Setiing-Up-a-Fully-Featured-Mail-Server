@@ -425,7 +425,7 @@ can do whatever you want with this stuff. If we meet some day, and you think thi
 ~ Jerry @ 0Host
 ***
 ## Contact
-Feel free to email me jerry@0host.us. Mahalo!  :palm_tree:
+Mahalo!  :palm_tree:
 ***
 ## Support on Beerpay
 Hey dude! Help me out for a couple of :beers:!
